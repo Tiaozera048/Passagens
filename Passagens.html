@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicite seu Orçamento</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .required {
+            color: #e53e3e;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #FF6B35;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+            transform: translateY(-2px);
+        }
+
+        input:hover, select:hover, textarea:hover {
+            border-color: #cbd5e0;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .checkbox-item:hover {
+            border-color: #FF6B35;
+            background: #FFF7ED;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            accent-color: #FF6B35;
+        }
+
+        .urgency-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .radio-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .radio-item input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .radio-item:hover {
+            border-color: #FF6B35;
+            background: #FFF7ED;
+        }
+
+        .radio-item input[type="radio"]:checked + span {
+            color: white;
+        }
+
+        .radio-item:has(input:checked) {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            border-color: #FF6B35;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .urgency-high {
+            border-color: #f56565 !important;
+        }
+
+        .urgency-high:has(input:checked) {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%) !important;
+            border-color: #f56565 !important;
+        }
+
+        .urgency-medium {
+            border-color: #ed8936 !important;
+        }
+
+        .urgency-medium:has(input:checked) {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%) !important;
+            border-color: #ed8936 !important;
+        }
+
+        .submit-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            color: white;
+            padding: 18px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .info-section {
+            background: #FFF7ED;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 15px;
+            border-left: 5px solid #FF6B35;
+        }
+
+        .info-section h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .info-section p {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .price-range {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .price-item {
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .price-item:hover {
+            border-color: #FF6B35;
+            background: #FFF7ED;
+        }
+
+        .price-item input[type="radio"] {
+            display: none;
+        }
+
+        .price-item:has(input:checked) {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            color: white;
+            border-color: #FF6B35;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .checkbox-group,
+            .urgency-options,
+            .price-range {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✈️ Solicite seu Orçamento</h1>
+            <p>Planeje sua viagem dos sonhos conosco</p>
+        </div>
+
+        <div class="form-container">
+            <form id="budgetForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name">Nome Completo <span class="required">*</span></label>
+                        <input type="text" id="name" name="name" required placeholder="Digite seu nome completo">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">E-mail <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Telefone/WhatsApp <span class="required">*</span></label>
+                        <input type="tel" id="phone" name="phone" required placeholder="(11) 99999-9999">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="document">CPF</label>
+                        <input type="text" id="document" name="document" placeholder="000.000.000-00">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="origin">Cidade de Origem <span class="required">*</span></label>
+                        <input type="text" id="origin" name="origin" required placeholder="De onde você vai partir?">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="destination">Destino <span class="required">*</span></label>
+                        <input type="text" id="destination" name="destination" required placeholder="Para onde você quer ir?">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="departure">Data de Ida <span class="required">*</span></label>
+                        <input type="date" id="departure" name="departure" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="return">Data de Volta</label>
+                        <input type="date" id="return" name="return">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="adults">Adultos <span class="required">*</span></label>
+                        <select id="adults" name="adults" required>
+                            <option value="">Selecione</option>
+                            <option value="1">1 adulto</option>
+                            <option value="2">2 adultos</option>
+                            <option value="3">3 adultos</option>
+                            <option value="4">4 adultos</option>
+                            <option value="5">5+ adultos</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="children">Crianças (0-11 anos)</label>
+                        <select id="children" name="children">
+                            <option value="0">Nenhuma</option>
+                            <option value="1">1 criança</option>
+                            <option value="2">2 crianças</option>
+                            <option value="3">3 crianças</option>
+                            <option value="4">4+ crianças</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Faixa de Orçamento (por pessoa)</label>
+                    <div class="price-range">
+                        <div class="price-item">
+                            <input type="radio" id="budget1" name="budget" value="ate-1000">
+                            <label for="budget1">Até R$ 1.000</label>
+                        </div>
+                        <div class="price-item">
+                            <input type="radio" id="budget2" name="budget" value="1000-3000">
+                            <label for="budget2">R$ 1.000 - 3.000</label>
+                        </div>
+                        <div class="price-item">
+                            <input type="radio" id="budget3" name="budget" value="3000-5000">
+                            <label for="budget3">R$ 3.000 - 5.000</label>
+                        </div>
+                        <div class="price-item">
+                            <input type="radio" id="budget4" name="budget" value="acima-5000">
+                            <label for="budget4">Acima de R$ 5.000</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Serviços Desejados</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="service1" name="services" value="passagens-aereas">
+                            <label for="service1">✈️ Passagens Aéreas</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="service2" name="services" value="hospedagem">
+                            <label for="service2">🏨 Hospedagem</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="service3" name="services" value="transfer">
+                            <label for="service3">🚗 Transfer</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="service4" name="services" value="seguro-viagem">
+                            <label for="service4">🛡️ Seguro Viagem</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="service5" name="services" value="passeios">
+                            <label for="service5">🎯 Passeios e Tours</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="service6" name="services" value="pacote-completo">
+                            <label for="service6">📦 Pacote Completo</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Urgência da Solicitação</label>
+                    <div class="urgency-options">
+                        <div class="radio-item urgency-high">
+                            <input type="radio" id="urgency1" name="urgency" value="urgente">
+                            <span>🚨 Urgente<br><small>(24h)</small></span>
+                        </div>
+                        <div class="radio-item urgency-medium">
+                            <input type="radio" id="urgency2" name="urgency" value="moderada" checked>
+                            <span>⏰ Moderada<br><small>(2-3 dias)</small></span>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="urgency3" name="urgency" value="flexivel">
+                            <span>📅 Flexível<br><small>(1 semana)</small></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="comments">Observações e Preferências</label>
+                    <textarea id="comments" name="comments" placeholder="Conte-nos mais sobre sua viagem dos sonhos... Preferências de hotel, atividades especiais, restrições alimentares, etc."></textarea>
+                </div>
+
+                <div class="info-section">
+                    <h3>📞 Como funciona?</h3>
+                    <p>Após enviar sua solicitação, nossa equipe entrará em contato via WhatsApp em até 2 horas úteis com opções personalizadas para sua viagem. Trabalhamos com as melhores operadoras e oferecemos condições especiais!</p>
+                </div>
+
+                <div class="submit-container">
+                    <button type="button" class="submit-btn" onclick="submitForm()">
+                        📱 Solicitar via WhatsApp
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Configurar data mínima como hoje
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('departure').min = today;
+            document.getElementById('return').min = today;
+        });
+
+        // Atualizar data de volta quando data de ida mudar
+        document.getElementById('departure').addEventListener('change', function() {
+            const returnDate = document.getElementById('return');
+            returnDate.min = this.value;
+            if (returnDate.value && returnDate.value < this.value) {
+                returnDate.value = '';
+            }
+        });
+
+        // Máscara para telefone
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            }
+            e.target.value = value;
+        });
+
+        // Máscara para CPF
+        document.getElementById('document').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+            }
+            e.target.value = value;
+        });
+
+        function submitForm() {
+            const form = document.getElementById('budgetForm');
+            const formData = new FormData(form);
+            
+            // Validar campos obrigatórios
+            const required = ['name', 'email', 'phone', 'origin', 'destination', 'departure', 'adults'];
+            let isValid = true;
+            
+            for (let field of required) {
+                const input = document.getElementById(field);
+                if (!input.value.trim()) {
+                    input.focus();
+                    input.style.borderColor = '#e53e3e';
+                    isValid = false;
+                    break;
+                }
+            }
+            
+            if (!isValid) {
+                alert('Por favor, preencha todos os campos obrigatórios (marcados com *)');
+                return;
+            }
+
+            // Coletar serviços selecionados
+            const services = Array.from(document.querySelectorAll('input[name="services"]:checked'))
+                .map(cb => cb.nextElementSibling.textContent.trim());
+
+            // Montar mensagem para WhatsApp
+            let message = `🌟 *SOLICITAÇÃO DE ORÇAMENTO* 🌟\n\n`;
+            message += `👤 *Nome:* ${formData.get('name')}\n`;
+            message += `📧 *E-mail:* ${formData.get('email')}\n`;
+            message += `📱 *Telefone:* ${formData.get('phone')}\n`;
+            if (formData.get('document')) message += `📄 *CPF:* ${formData.get('document')}\n`;
+            message += `\n✈️ *DETALHES DA VIAGEM*\n`;
+            message += `📍 *Origem:* ${formData.get('origin')}\n`;
+            message += `🎯 *Destino:* ${formData.get('destination')}\n`;
+            message += `🗓️ *Data de Ida:* ${new Date(formData.get('departure')).toLocaleDateString('pt-BR')}\n`;
+            if (formData.get('return')) {
+                message += `🗓️ *Data de Volta:* ${new Date(formData.get('return')).toLocaleDateString('pt-BR')}\n`;
+            }
+            message += `👥 *Passageiros:* ${formData.get('adults')} adulto(s)`;
+            if (formData.get('children') && formData.get('children') !== '0') {
+                message += ` + ${formData.get('children')} criança(s)`;
+            }
+            message += `\n`;
+            
+            if (formData.get('budget')) {
+                const budgetLabels = {
+                    'ate-1000': 'Até R$ 1.000',
+                    '1000-3000': 'R$ 1.000 - 3.000',
+                    '3000-5000': 'R$ 3.000 - 5.000',
+                    'acima-5000': 'Acima de R$ 5.000'
+                };
+                message += `💰 *Orçamento:* ${budgetLabels[formData.get('budget')]} (por pessoa)\n`;
+            }
+
+            if (services.length > 0) {
+                message += `\n🎯 *SERVIÇOS DESEJADOS:*\n${services.map(s => `• ${s}`).join('\n')}\n`;
+            }
+
+            if (formData.get('urgency')) {
+                const urgencyLabels = {
+                    'urgente': '🚨 Urgente (24h)',
+                    'moderada': '⏰ Moderada (2-3 dias)',
+                    'flexivel': '📅 Flexível (1 semana)'
+                };
+                message += `⏱️ *Urgência:* ${urgencyLabels[formData.get('urgency')]}\n`;
+            }
+
+            if (formData.get('comments')) {
+                message += `\n💬 *Observações:*\n${formData.get('comments')}\n`;
+            }
+
+            // Codificar mensagem para URL
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/556999653595?text=${encodedMessage}`;
+            
+            // Abrir WhatsApp
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Animação nos inputs
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
